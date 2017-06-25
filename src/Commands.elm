@@ -77,4 +77,4 @@ playerEncoder player =
 
 deletePlayerCmd : Player -> Cmd Msg
 deletePlayerCmd player =
-    delete "/api/cats/" Msgs.OnDeletePlayer Decode.value
+    delete (fetchPlayersUrl ++ "/" ++ player.id) Msgs.FetchPlayers (playerEncoder player)

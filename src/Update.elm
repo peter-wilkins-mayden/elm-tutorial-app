@@ -1,16 +1,18 @@
 module Update exposing (..)
 
-import Commands exposing (savePlayerCmd)
+import Commands exposing (deletePlayerCmd, fetchPlayers, savePlayerCmd)
 import Models exposing (Model, Player)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import RemoteData.Http exposing (delete)
 import Routing exposing (parseLocation)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Msgs.FetchPlayers status ->
+            ( model, fetchPlayers )
+
         Msgs.OnFetchPlayers response ->
             ( { model | players = response }, Cmd.none )
 
@@ -35,10 +37,7 @@ update msg model =
             ( model, Cmd.none )
 
         Msgs.DeletePlayer player ->
-            ( { model | players = WebData (List.filter (\p -> p.id /= player.id) model.players) }, Cmd.none )
-
-        Msgs.OnDeletePlayer response ->
-            ( model, Cmd.none )
+            ( model, deletePlayerCmd player )
 
 
 updatePlayer : Model -> Player -> Model
