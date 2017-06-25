@@ -4,9 +4,10 @@ import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
+import Models exposing (Player, PlayerId)
 import Msgs exposing (Msg)
-import Models exposing (PlayerId, Player)
 import RemoteData
+import RemoteData.Http exposing (delete)
 
 
 fetchPlayers : Cmd Msg
@@ -71,4 +72,9 @@ playerEncoder player =
             , ( "level", Encode.int player.level )
             ]
     in
-        Encode.object attributes
+    Encode.object attributes
+
+
+deletePlayerCmd : Player -> Cmd Msg
+deletePlayerCmd player =
+    delete "/api/cats/" Msgs.OnDeletePlayer Decode.value

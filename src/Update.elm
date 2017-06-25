@@ -3,8 +3,9 @@ module Update exposing (..)
 import Commands exposing (savePlayerCmd)
 import Models exposing (Model, Player)
 import Msgs exposing (Msg)
+import RemoteData exposing (WebData)
+import RemoteData.Http exposing (delete)
 import Routing exposing (parseLocation)
-import RemoteData
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -18,19 +19,25 @@ update msg model =
                 newRoute =
                     parseLocation location
             in
-                ( { model | route = newRoute }, Cmd.none )
+            ( { model | route = newRoute }, Cmd.none )
 
         Msgs.ChangeLevel player howMuch ->
             let
                 updatedPlayer =
                     { player | level = player.level + howMuch }
             in
-                ( model, savePlayerCmd updatedPlayer )
+            ( model, savePlayerCmd updatedPlayer )
 
         Msgs.OnPlayerSave (Ok player) ->
             ( updatePlayer model player, Cmd.none )
 
         Msgs.OnPlayerSave (Err error) ->
+            ( model, Cmd.none )
+
+        Msgs.DeletePlayer player ->
+            ( { model | players = WebData (List.filter (\p -> p.id /= player.id) model.players) }, Cmd.none )
+
+        Msgs.OnDeletePlayer response ->
             ( model, Cmd.none )
 
 
@@ -49,4 +56,4 @@ updatePlayer model updatedPlayer =
         updatedPlayers =
             RemoteData.map updatePlayerList model.players
     in
-        { model | players = updatedPlayers }
+    { model | players = updatedPlayers }
