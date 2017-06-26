@@ -2,6 +2,7 @@ module Players.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
+import Html.Events exposing (onClick)
 import Models exposing (Player)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -62,7 +63,7 @@ playerRow player =
         , td [] [ text player.name ]
         , td [] [ text (toString player.level) ]
         , td []
-            [ editBtn player ]
+            [ editBtn player, btnDeletePlayer player ]
         ]
 
 
@@ -72,8 +73,18 @@ editBtn player =
         path =
             playerPath player.id
     in
-        a
-            [ class "btn regular"
-            , href path
-            ]
-            [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+    a
+        [ class "btn regular"
+        , href path
+        ]
+        [ i [ class "fa fa-pencil mr1" ] [], text "Edit" ]
+
+
+btnDeletePlayer : Player -> Html Msg
+btnDeletePlayer player =
+    let
+        message =
+            Msgs.DeletePlayer player
+    in
+    a [ class "btn regular", onClick message ]
+        [ i [ class "fa fa-trash-o" ] [], text " Delete" ]
