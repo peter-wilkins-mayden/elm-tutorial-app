@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import Models exposing (Player)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import Routing exposing (playerPath)
+import Routing exposing (addPath, playerPath)
 
 
 view : WebData (List Player) -> Html Msg
@@ -20,7 +20,11 @@ view response =
 nav : Html Msg
 nav =
     div [ class "clearfix mb2 white bg-black" ]
-        [ div [ class "left p2" ] [ text "Players" ] ]
+        [ div [ class "left p2" ]
+            [ text "Players"
+            , addBtn
+            ]
+        ]
 
 
 maybeList : WebData (List Player) -> Html Msg
@@ -88,3 +92,12 @@ btnDeletePlayer player =
     in
     a [ class "btn regular", onClick message ]
         [ i [ class "fa fa-trash-o" ] [], text " Delete" ]
+
+
+addBtn : Html Msg
+addBtn =
+    a
+        [ class "btn regular"
+        , href addPath
+        ]
+        [ i [ class "fa fa-chevron-left mr1" ] [], text "Add Player" ]

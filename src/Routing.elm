@@ -1,7 +1,7 @@
 module Routing exposing (..)
 
-import Navigation exposing (Location)
 import Models exposing (PlayerId, Route(..))
+import Navigation exposing (Location)
 import UrlParser exposing (..)
 
 
@@ -11,12 +11,13 @@ matchers =
         [ map PlayersRoute top
         , map PlayerRoute (s "players" </> string)
         , map PlayersRoute (s "players")
+        , map AddPlayerRoute (s "add")
         ]
 
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (parseHash matchers location) of
+    case parseHash matchers location of
         Just route ->
             route
 
@@ -32,3 +33,8 @@ playersPath =
 playerPath : PlayerId -> String
 playerPath id =
     "#players/" ++ id
+
+
+addPath : String
+addPath =
+    "#add"

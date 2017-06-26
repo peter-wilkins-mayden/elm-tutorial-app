@@ -78,3 +78,24 @@ playerEncoder player =
 deletePlayerCmd : Player -> Cmd Msg
 deletePlayerCmd player =
     delete (fetchPlayersUrl ++ "/" ++ player.id) Msgs.FetchPlayers (playerEncoder player)
+
+
+savePlayerCmd : Form.Msg -> Cmd Msg
+savePlayerCmd formMsg =
+    addPlayerRequest formMsg
+        |> Http.send Msgs.FetchPlayers
+
+
+addPlayerRequest : Form.Msg -> Http.Request Player
+
+
+savePlayerRequest formMsg =
+    Http.request
+        { body = playerEncoder formMsg |> Http.jsonBody
+        , expect = Http.expectJson playerDecoder
+        , headers = []
+        , method = "POST"
+        , timeout = Nothing
+        , url = "http://localhost:4000/players/"
+        , withCredentials = False
+        }

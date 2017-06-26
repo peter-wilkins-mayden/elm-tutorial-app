@@ -3,6 +3,7 @@ module View exposing (..)
 import Html exposing (Html, div, text)
 import Models exposing (Model, PlayerId)
 import Msgs exposing (Msg)
+import Players.Add
 import Players.Edit
 import Players.List
 import RemoteData
@@ -19,6 +20,9 @@ page model =
     case model.route of
         Models.PlayersRoute ->
             Players.List.view model.players
+
+        Models.AddPlayerRoute ->
+            Players.Add.view model
 
         Models.PlayerRoute id ->
             playerEditPage model id

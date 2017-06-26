@@ -1,7 +1,8 @@
 module Update exposing (..)
 
 import Commands exposing (deletePlayerCmd, fetchPlayers, savePlayerCmd)
-import Models exposing (Model, Player)
+import Form exposing (Form)
+import Models exposing (Model, Player, validation)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Routing exposing (parseLocation)
@@ -38,6 +39,15 @@ update msg model =
 
         Msgs.DeletePlayer player ->
             ( model, deletePlayerCmd player )
+
+        Msgs.AddPlayer player ->
+            ( model, savePlayerCmd player )
+
+        Msgs.NoOp ->
+            ( model, Cmd.none )
+
+        Msgs.FormMsg formMsg ->
+            ( { model | form = Form.update validation formMsg model.form }, savePlayerCmd formMsg )
 
 
 updatePlayer : Model -> Player -> Model

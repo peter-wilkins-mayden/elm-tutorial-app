@@ -1,5 +1,6 @@
 module Msgs exposing (..)
 
+import Form exposing (Form)
 import Http
 import Models exposing (Player, PlayerId)
 import Navigation exposing (Location)
@@ -13,3 +14,6 @@ type Msg
     | ChangeLevel Player Int
     | OnPlayerSave (Result Http.Error Player)
     | DeletePlayer Player
+    | AddPlayer Player
+    | NoOp
+    | FormMsg Form.Msg
