@@ -40,14 +40,22 @@ update msg model =
         Msgs.DeletePlayer player ->
             ( model, deletePlayerCmd player )
 
-        Msgs.AddPlayer player ->
-            ( model, savePlayerCmd player )
+        Msgs.OnAddPlayer (Ok player) ->
+            ( model, fetchPlayers )
+
+        Msgs.OnAddPlayer (Err error) ->
+            ( model, Cmd.none )
 
         Msgs.NoOp ->
             ( model, Cmd.none )
 
         Msgs.FormMsg formMsg ->
-            ( { model | form = Form.update validation formMsg model.form }, savePlayerCmd formMsg )
+            case ( formMsg, Form.getOutput model.form ) of
+                ( Form.Submit, Just player ) ->
+                    ( model, savePlayerCmd player )
+
+                _ ->
+                    ( { model | form = Form.update validation formMsg model.form }, Cmd.none )
 
 
 updatePlayer : Model -> Player -> Model

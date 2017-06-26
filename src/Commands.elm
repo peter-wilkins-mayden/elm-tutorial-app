@@ -1,5 +1,6 @@
 module Commands exposing (..)
 
+import Form exposing (Form)
 import Http
 import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
@@ -80,18 +81,16 @@ deletePlayerCmd player =
     delete (fetchPlayersUrl ++ "/" ++ player.id) Msgs.FetchPlayers (playerEncoder player)
 
 
-savePlayerCmd : Form.Msg -> Cmd Msg
-savePlayerCmd formMsg =
-    addPlayerRequest formMsg
-        |> Http.send Msgs.FetchPlayers
+addPlayerCmd : Player -> Cmd Msg
+addPlayerCmd player =
+    addPlayerRequest player
+        |> Http.send Msgs.OnAddPlayer
 
 
-addPlayerRequest : Form.Msg -> Http.Request Player
-
-
-savePlayerRequest formMsg =
+addPlayerRequest : Player -> Http.Request Player
+addPlayerRequest player =
     Http.request
-        { body = playerEncoder formMsg |> Http.jsonBody
+        { body = playerEncoder player |> Http.jsonBody
         , expect = Http.expectJson playerDecoder
         , headers = []
         , method = "POST"

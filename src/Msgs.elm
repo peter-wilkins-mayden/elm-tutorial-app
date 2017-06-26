@@ -14,6 +14,6 @@ type Msg
     | ChangeLevel Player Int
     | OnPlayerSave (Result Http.Error Player)
     | DeletePlayer Player
-    | AddPlayer Player
+    | OnAddPlayer (Result Http.Error Player)
     | NoOp
     | FormMsg Form.Msg
